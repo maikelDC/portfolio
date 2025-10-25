@@ -12,16 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('profiles', function (Blueprint $table) {
+
             $table->id();
-
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('full_name');
-            $table->string('title');
-            $table->string('location');
-            $table->string('phone');
+            $table->string('slug')->unique();
+            $table->string('title')->nullable(); // ejemplo: “Desarrollador web | Full Stack | Laravel”
+            $table->string('location')->nullable();
+            $table->string('phone')->nullable();
             $table->string('email')->unique();
-            $table->text('bio');
-
+            $table->text('bio')->nullable();
             $table->timestamps();
         });
     }

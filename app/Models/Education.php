@@ -4,30 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model
+class Education extends Model
 {
     protected $fillable = [
         'profile_id',
-        'category_id',
-        'title',
-        'slug',
-        'description',
-        'role',
+        'institution',
+        'degree',
+        'type',
         'start_date',
         'end_date',
-        'team_size',
-        'status',
-        'is_favorite',
+        'description',
     ];
 
     public function profile()
     {
         return $this->belongsTo(Profile::class);
-    }
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
     }
 
     public function images()
