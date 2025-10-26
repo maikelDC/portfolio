@@ -10,361 +10,386 @@ php artisan tinker
 
 ---
 
-## 1. Crear Usuario y Perfil
+## 👤 1. Crear Usuario
 
 ```php
-// Crear usuario
 $user = \App\Models\User::create([
     'name' => 'Juan Pérez',
     'email' => 'juan@example.com',
     'password' => bcrypt('password123')
 ]);
+```
 
-// Crear perfil asociado al usuario
-$profile = \App\Models\Profile::create([
+---
+
+## ⭐ 2. Categorías (áreas profesionales)
+
+```php
+$backend = App\Models\Category::create(['name' => 'Backend', 'slug' => 'backend', 'description' => 'Desarrollo de servidores y APIs']);
+$frontend = App\Models\Category::create(['name' => 'Frontend', 'slug' => 'frontend', 'description' => 'Interfaces web y UX/UI']);
+```
+
+---
+
+## 🏷️ 3. Tags (habilidades y tecnologías)
+
+```php
+$laravel = App\Models\Tag::create(['name' => 'Laravel', 'slug' => 'laravel', 'type' => 'technical', 'icon_path' => 'icons/laravel.svg']);
+$vue = App\Models\Tag::create(['name' => 'Vue.js', 'slug' => 'vuejs', 'type' => 'technical', 'icon_path' => 'icons/vue.svg']);
+$teamwork = App\Models\Tag::create(['name' => 'Trabajo en equipo', 'slug' => 'equipo', 'type' => 'soft', 'icon_path' => 'icons/teamwork.svg']);
+```
+
+---
+
+## 👨🏽‍⚖️ 4. Perfil Profesional (👤 requiere user y ⭐ category previas)
+
+```php
+$profile = App\Models\Profile::create([
     'user_id' => $user->id,
-    'full_name' => 'Juan Carlos Pérez García',
-    'title' => 'Full Stack Developer',
-    'location' => 'Madrid, España',
-    'phone' => '+34 612 345 678',
-    'email' => 'juan.perez@professional.com',
-    'bio' => 'Desarrollador apasionado con 5 años de experiencia en aplicaciones web modernas.'
+    'full_name' => 'Juan Pérez',
+    'title' => 'Desarrollador Full Stack',
+    'slug' => 'juan-perez',
+    'location' => 'Caracas, Venezuela',
+    'phone' => '+584141234567',
+    'email' => $user->email,
+    'short_bio' => 'Apasionado por la tecnología y desarrollo web',
+    'category_id' => $backend->id,
 ]);
 ```
 
 ---
 
-## 2. Crear Proyectos
+## ⭐ 5. Proyectos (requiere profile y category)
 
 ```php
-// Proyecto 1
-$project1 = \App\Models\Project::create([
+$project = App\Models\Project::create([
     'profile_id' => $profile->id,
-    'title' => 'Sistema de Gestión de Inventario',
-    'description' => 'Desarrollo de un sistema completo para gestión de inventario en tiempo real.',
-    'role' => 'Lead Developer',
-    'started_at' => '2023-01-15',
-    'finished_at' => '2023-06-30',
+    'category_id' => $frontend->id,
+    'title' => 'Plataforma de reservas en línea',
+    'slug' => 'reservas-online',
+    'description' => 'Aplicación web para reservar eventos y hoteles.',
+    'role' => 'Líder de desarrollo frontend',
+    'start_date' => '2023-01-01',
+    'end_date' => '2023-07-01',
     'team_size' => 5,
     'status' => true,
-    'is_favorite' => true
-]);
-
-// Proyecto 2
-$project2 = \App\Models\Project::create([
-    'profile_id' => $profile->id,
-    'title' => 'E-commerce Platform',
-    'description' => 'Plataforma de comercio electrónico con integración de pagos.',
-    'role' => 'Backend Developer',
-    'started_at' => '2023-07-01',
-    'finished_at' => null, // Proyecto en curso
-    'team_size' => 8,
-    'status' => true,
-    'is_favorite' => true
-]);
-
-// Proyecto 3
-$project3 = \App\Models\Project::create([
-    'profile_id' => $profile->id,
-    'title' => 'API REST para Mobile App',
-    'description' => 'API RESTful para aplicación móvil de gestión de tareas.',
-    'role' => 'Full Stack Developer',
-    'started_at' => '2022-09-01',
-    'finished_at' => '2022-12-15',
-    'team_size' => 3,
-    'status' => true,
-    'is_favorite' => false
+    'is_favorite' => true,
 ]);
 ```
 
 ---
 
-## 3. Crear Skills (Habilidades)
-
-### Skills Técnicas
+## 🎓 6. Educations (estudios y cursos, requiere profile)
 
 ```php
-$skill1 = \App\Models\Skill::create([
+$education = App\Models\Education::create([
     'profile_id' => $profile->id,
-    'name' => 'Laravel',
-    'type' => 'tecnicas'
-]);
-
-$skill2 = \App\Models\Skill::create([
-    'profile_id' => $profile->id,
-    'name' => 'Vue.js',
-    'type' => 'tecnicas'
-]);
-
-$skill3 = \App\Models\Skill::create([
-    'profile_id' => $profile->id,
-    'name' => 'MySQL',
-    'type' => 'tecnicas'
-]);
-
-$skill4 = \App\Models\Skill::create([
-    'profile_id' => $profile->id,
-    'name' => 'Docker',
-    'type' => 'tecnicas'
-]);
-
-$skill5 = \App\Models\Skill::create([
-    'profile_id' => $profile->id,
-    'name' => 'PHP',
-    'type' => 'tecnicas'
-]);
-
-$skill6 = \App\Models\Skill::create([
-    'profile_id' => $profile->id,
-    'name' => 'JavaScript',
-    'type' => 'tecnicas'
-]);
-```
-
-### Skills Blandas
-
-```php
-$skill7 = \App\Models\Skill::create([
-    'profile_id' => $profile->id,
-    'name' => 'Trabajo en Equipo',
-    'type' => 'blandas'
-]);
-
-$skill8 = \App\Models\Skill::create([
-    'profile_id' => $profile->id,
-    'name' => 'Liderazgo',
-    'type' => 'blandas'
-]);
-
-$skill9 = \App\Models\Skill::create([
-    'profile_id' => $profile->id,
-    'name' => 'Comunicación',
-    'type' => 'blandas'
-]);
-
-$skill10 = \App\Models\Skill::create([
-    'profile_id' => $profile->id,
-    'name' => 'Resolución de Problemas',
-    'type' => 'blandas'
+    'institution' => 'Universidad Central',
+    'degree' => 'Ingeniero Informático',
+    'type' => 'universitaria',
+    'start_date' => '2018-10-01',
+    'end_date' => '2023-07-01',
+    'description' => 'Título universitario en ingeniería informática',
 ]);
 ```
 
 ---
 
-## 4. Asociar Skills a Proyectos (Tabla Pivot)
+## 🖼️ 7. Imágenes polimórficas (relacionadas a profile, project, education, tag...)
 
 ```php
-// Asociar skills al proyecto 1
-$project1->skills()->attach([$skill1->id, $skill2->id, $skill3->id, $skill5->id]);
-
-// Asociar skills al proyecto 2
-$project2->skills()->attach([$skill1->id, $skill2->id, $skill4->id, $skill6->id]);
-
-// Asociar skills al proyecto 3
-$project3->skills()->attach([$skill1->id, $skill3->id, $skill5->id]);
-```
-
----
-
-## 5. Crear Estudios
-
-```php
-$study1 = \App\Models\Study::create([
-    'profile_id' => $profile->id,
-    'institution' => 'Universidad Complutense de Madrid',
-    'degree' => 'Ingeniería Informática',
-    'start_date' => '2015-09-01',
-    'end_date' => '2019-06-30',
-    'description' => 'Especialización en Desarrollo de Software'
+// Avatar para perfil
+$profile->images()->create([
+    'image_path' => 'avatars/juan.png',
+    'title' => 'Avatar',
+    'type' => 'avatar'
 ]);
 
-$study2 = \App\Models\Study::create([
-    'profile_id' => $profile->id,
-    'institution' => 'Universidad Politécnica de Madrid',
-    'degree' => 'Máster en Ingeniería Web',
-    'start_date' => '2019-09-01',
-    'end_date' => '2020-07-15',
-    'description' => 'Enfoque en arquitecturas escalables y cloud computing'
+// Banner y galería del proyecto
+$project->images()->create([
+    'image_path' => 'proyectos/reservas/banner.png',
+    'title' => 'Banner principal',
+    'type' => 'banner'
 ]);
-```
-
----
-
-## 6. Crear Trainings (Cursos/Capacitaciones)
-
-```php
-$training1 = \App\Models\Training::create([
-    'profile_id' => $profile->id,
-    'title' => 'Advanced Laravel Development',
-    'provider' => 'Laracasts',
-    'description' => 'Curso avanzado de Laravel con patrones de diseño y buenas prácticas.',
-    'start_date' => '2022-01-10',
-    'end_date' => '2022-03-15'
+$project->images()->create([
+    'image_path' => 'proyectos/reservas/galeria1.png',
+    'title' => 'Screenshot de la app',
+    'type' => 'gallery'
 ]);
 
-$training2 = \App\Models\Training::create([
-    'profile_id' => $profile->id,
-    'title' => 'Docker & Kubernetes for Developers',
-    'provider' => 'Udemy',
-    'description' => 'Containerización y orquestación de aplicaciones.',
-    'start_date' => '2022-06-01',
-    'end_date' => '2022-07-20'
+// Imagen de certificado en education
+$education->images()->create([
+    'image_path' => 'certificados/uni-certificado.png',
+    'title' => 'Certificado electrónico',
+    'type' => 'certificate'
 ]);
 
-$training3 = \App\Models\Training::create([
-    'profile_id' => $profile->id,
-    'title' => 'AWS Certified Solutions Architect',
-    'provider' => 'AWS Training',
-    'description' => 'Certificación en arquitectura de soluciones en AWS.',
-    'start_date' => '2023-02-01',
-    'end_date' => null // En curso
-]);
-
-$training4 = \App\Models\Training::create([
-    'profile_id' => $profile->id,
-    'title' => 'Vue.js 3 - The Complete Guide',
-    'provider' => 'Udemy',
-    'description' => 'Desarrollo de aplicaciones modernas con Vue.js 3 y Composition API.',
-    'start_date' => '2023-05-01',
-    'end_date' => '2023-06-15'
+// Icono para el tag (si quieres vincular una imagen polimórficamente al tag)
+$laravel->images()->create([
+    'image_path' => 'icons/laravel.svg',
+    'title' => 'Laravel Icon',
+    'type' => 'icon'
 ]);
 ```
 
 ---
 
-## 7. Comandos Útiles para Verificar Datos
+## 🔗 8. Links polimórficos (social, demo, repo, certificado…)
 
 ```php
-// Ver todos los proyectos de un perfil
-$profile->projects;
+// Link de redes sociales para perfil
+$profile->links()->create([
+    'url' => 'https://linkedin.com/in/juanperez',
+    'label' => 'LinkedIn',
+    'type' => 'social',
+    'icon_path' => 'icons/linkedin.svg'
+]);
 
-// Ver todas las skills de un perfil
-$profile->skills;
+// Link a demo y repositorio en proyecto
+$project->links()->create([
+    'url' => 'https://demo.misitio.com',
+    'label' => 'Demo en vivo',
+    'type' => 'demo',
+    'icon_path' => 'icons/web.svg'
+]);
+$project->links()->create([
+    'url' => 'https://github.com/juanperez/reservas',
+    'label' => 'Repositorio',
+    'type' => 'repo',
+    'icon_path' => 'icons/github.svg'
+]);
 
-// Ver las skills de un proyecto específico
-$project1->skills;
+// Link al certificado digital en education
+$education->links()->create([
+    'url' => 'https://certificados.universidad.com/uni-certificado',
+    'label' => 'Ver certificado',
+    'type' => 'certificate',
+    'icon_path' => 'icons/certificate.svg'
+]);
 
-// Ver los estudios
-$profile->studies;
-
-// Ver los trainings
-$profile->trainings;
-
-// Contar registros
-\App\Models\Project::count();
-\App\Models\Skill::count();
-\App\Models\Study::count();
-\App\Models\Training::count();
-
-// Ver el perfil con todas sus relaciones
-$profile->load(['projects', 'skills', 'studies', 'trainings', 'user']);
-
-// Ver proyectos favoritos
-\App\Models\Project::where('is_favorite', true)->get();
-
-// Ver proyectos activos
-\App\Models\Project::where('status', true)->get();
-
-// Ver skills por tipo
-\App\Models\Skill::where('type', 'tecnicas')->get();
-\App\Models\Skill::where('type', 'blandas')->get();
 ```
 
 ---
 
-## 8. Comando Completo en una Sola Ejecución
-
-Puedes copiar todo esto en Tinker de una vez:
-
+## 🔖 9. Tags polimórficos (asociar tags a proyectos, perfil, educación, etc.)
 ```php
-// Crear usuario y perfil
-$user = \App\Models\User::create(['name' => 'Juan Pérez', 'email' => 'juan@example.com', 'password' => bcrypt('password123')]);
-$profile = \App\Models\Profile::create(['user_id' => $user->id, 'full_name' => 'Juan Carlos Pérez García', 'title' => 'Full Stack Developer', 'location' => 'Madrid, España', 'phone' => '+34 612 345 678', 'email' => 'juan.perez@professional.com', 'bio' => 'Desarrollador apasionado con 5 años de experiencia.']);
+// Asociar etiquetas tecnológicas y blandas al proyecto
+$project->tags()->attach([$laravel->id, $vue->id, $teamwork->id]);
 
-// Crear proyectos
-$project1 = \App\Models\Project::create(['profile_id' => $profile->id, 'title' => 'Sistema de Gestión de Inventario', 'description' => 'Sistema completo para gestión de inventario', 'role' => 'Lead Developer', 'started_at' => '2023-01-15', 'finished_at' => '2023-06-30', 'team_size' => 5, 'status' => true, 'is_favorite' => true]);
-$project2 = \App\Models\Project::create(['profile_id' => $profile->id, 'title' => 'E-commerce Platform', 'description' => 'Plataforma de comercio electrónico', 'role' => 'Backend Developer', 'started_at' => '2023-07-01', 'finished_at' => null, 'team_size' => 8, 'status' => true, 'is_favorite' => true]);
+// Asociar una tecnología al perfil
+$profile->tags()->attach($laravel->id);
 
-// Crear skills
-$skill1 = \App\Models\Skill::create(['profile_id' => $profile->id, 'name' => 'Laravel', 'type' => 'tecnicas']);
-$skill2 = \App\Models\Skill::create(['profile_id' => $profile->id, 'name' => 'Vue.js', 'type' => 'tecnicas']);
-$skill3 = \App\Models\Skill::create(['profile_id' => $profile->id, 'name' => 'MySQL', 'type' => 'tecnicas']);
-$skill4 = \App\Models\Skill::create(['profile_id' => $profile->id, 'name' => 'Trabajo en Equipo', 'type' => 'blandas']);
-
-// Asociar skills a proyectos
-$project1->skills()->attach([$skill1->id, $skill2->id, $skill3->id]);
-$project2->skills()->attach([$skill1->id, $skill2->id]);
-
-// Crear estudios
-$study1 = \App\Models\Study::create(['profile_id' => $profile->id, 'institution' => 'Universidad Complutense de Madrid', 'degree' => 'Ingeniería Informática', 'start_date' => '2015-09-01', 'end_date' => '2019-06-30', 'description' => 'Especialización en Desarrollo de Software']);
-
-// Crear trainings
-$training1 = \App\Models\Training::create(['profile_id' => $profile->id, 'title' => 'Advanced Laravel Development', 'provider' => 'Laracasts', 'description' => 'Curso avanzado de Laravel', 'start_date' => '2022-01-10', 'end_date' => '2022-03-15']);
-
-echo "✅ Datos creados exitosamente";
+// Asociar misma tecnología a education
+$education->tags()->attach($laravel->id);
 ```
 
 ---
 
-## 9. Limpiar Base de Datos (Cuidado!)
-
-Si necesitas empezar de nuevo:
+## ⏩ 10. Consultas recomendadas para visualizar tus datos
 
 ```php
-// Eliminar todos los datos (en orden por dependencias)
-\App\Models\Project::query()->delete();
-\App\Models\Skill::query()->delete();
-\App\Models\Study::query()->delete();
-\App\Models\Training::query()->delete();
-\App\Models\Profile::query()->delete();
-\App\Models\User::query()->delete();
+// Proyectos de una categoría
+App\Models\Project::where('category_id', $frontend->id)->get();
 
-// O resetear toda la base de datos desde consola:
-// php artisan migrate:fresh
+// Todos los tags de un proyecto
+$project->tags;
+
+// Todas las imágenes de galería del proyecto
+$project->images()->where('type', 'gallery')->get();
+
+// Links sociales del perfil
+$profile->links()->where('type', 'social')->get();
+
+// Educación, ver imágenes y links de certificado
+$education->images;
+$education->links;
 ```
 
 ---
 
-## 10. Crear Múltiples Registros Rápidamente
+# 👀 Consultas y visualizaciones útiles en Tinker
+
+## 1. Ver todos los usuarios
 
 ```php
-// Crear múltiples skills de una vez
-$technicalSkills = ['PHP', 'JavaScript', 'Python', 'Java', 'Git', 'Linux'];
-foreach ($technicalSkills as $skillName) {
-    \App\Models\Skill::create([
-        'profile_id' => $profile->id,
-        'name' => $skillName,
-        'type' => 'tecnicas'
-    ]);
-}
-
-// Crear múltiples trainings
-$trainings = [
-    ['title' => 'TDD con PHPUnit', 'provider' => 'Platzi', 'start_date' => '2023-01-01', 'end_date' => '2023-02-01'],
-    ['title' => 'Clean Code', 'provider' => 'Udemy', 'start_date' => '2022-08-01', 'end_date' => '2022-09-15'],
-    ['title' => 'API REST Design', 'provider' => 'Coursera', 'start_date' => '2023-03-01', 'end_date' => '2023-04-01'],
-];
-
-foreach ($trainings as $trainingData) {
-    \App\Models\Training::create([
-        'profile_id' => $profile->id,
-        'title' => $trainingData['title'],
-        'provider' => $trainingData['provider'],
-        'description' => 'Curso sobre ' . $trainingData['title'],
-        'start_date' => $trainingData['start_date'],
-        'end_date' => $trainingData['end_date']
-    ]);
-}
+App\Models\User::all();
 ```
 
 ---
+
+## 2. Ver todos los perfiles
+```php
+App\Models\Profile::all();
+```
+
+---
+
+## 3. Ver todas las categorías
+
+```php
+App\Models\Category::all();
+```
+
+---
+
+## 4. Ver todas las etiquetas (tags)
+
+```php
+App\Models\Tag::all();
+```
+
+---
+
+## 5. Ver todos los proyectos
+
+```php
+App\Models\Project::all();
+```
+
+---
+
+## 6. Ver todas las educaciones/cursos
+
+```php
+App\Models\Education::all();
+```
+
+---
+
+## 7. Ver todas las imagénes
+
+```php
+App\Models\Image::all();
+```
+
+---
+
+## 8. Ver todos los Links
+
+```php
+App\Models\Link::all();
+```
+
+---
+
+## 9. Ver todas las etiquetas (tagabbles pivot)
+
+```php
+DB::table('taggables')->get();
+```
+
+---
+
+## 10. 🔍 Ver un perfil completo con todas sus relaciones
+
+```php
+$profile = App\Models\Profile::with([
+    'user',
+    'category',
+    'projects.images',
+    'projects.tags',
+    'projects.links',
+    'educations.images',
+    'educations.links',
+    'tags',
+    'images',
+    'links'
+])->find(1); // Cambia 1 por el ID del perfil a consultar
+
+// Ahora puedes ver, por ejemplo:
+$profile->projects;           // Proyectos del perfil
+$profile->tags;               // Habilidades/tecnologías del perfil
+$profile->category;           // Categoría principal
+$profile->images;             // Avatar o imágenes asociadas
+$profile->links;              // Enlaces sociales
+$profile->educations;         // Estudio o formación
+
+$profile->projects->pluck('title');  // Solo títulos de proyectos
+```
+---
+
+## 11. ⭐ Ver los proyectos favoritos de un perfil
+
+```php
+$profile->projects()->where('is_favorite', true)->get();
+```
+
+---
+
+## 12. 🔖 Ver habilidades técnicas y blandas del perfil
+
+```php
+// Técnicas
+$profile->tags()->where('type', 'technical')->get();
+
+// Blandas
+$profile->tags()->where('type', 'soft')->get();
+```
+
+---
+
+## 13. 🔖 Ver habilidades técnicas y blandas de un proyecto
+
+```php
+$project = App\Models\Project::with('tags')->find(1); // Cambia el ID
+// Técnicas:
+$project->tags->where('type', 'technical');
+// Blandas:
+$project->tags->where('type', 'soft');
+```
+
+---
+
+## 14. 👁️ Ver todos los proyectos de una categoría
+
+```php
+$backend = App\Models\Category::where('slug','backend')->first();
+$backend->projects;
+```
+
+---
+
+## 15. 🖼️ Ver todas las imágenes tipo 'avatar'
+
+```php
+App\Models\Image::where('type', 'avatar')->get();
+```
+
+---
+
+## 16. 🔗 Ver todos los links tipo 'social'
+
+```php
+App\Models\Link::where('type', 'social')->get();
+```
+
+---
+
+# 🧹 Limpieza y reseteo
+
+## Limpiar toda la base de datos y volver a poblar
+
+```php
+// Esto elimina todas las tablas, las recrea y ejecuta los seeders (si tienes seeders configurados).
+php artisan migrate:fresh --seed
+
+// Eliminar todos los registros de una tabla (solo en desarrollo):
+App\Models\Project::truncate();
+App\Models\Profile::truncate();
+App\Models\Category::truncate();
+App\Models\Tag::truncate();
+App\Models\Education::truncate();
+App\Models\Image::truncate();
+App\Models\Link::truncate();
+DB::table('taggables')->truncate(); // Para el pivot polimórfico
+
+```
 
 ## Notas
 
 - Los IDs se generan automáticamente
 - Las fechas deben estar en formato `YYYY-MM-DD`
 - `finished_at` y `end_date` pueden ser `null` para indicar proyectos/estudios en curso
-- La relación muchos a muchos entre proyectos y skills usa la tabla pivot `project_skill`
-- Recuerda ejecutar las migraciones antes: `php artisan migrate`
+- Recuerda ejecutar las migraciones antes: `php artisan migrate` o `php artisan migrate:fresh`
 
 ¡Listo para poblar tu portfolio! 🚀

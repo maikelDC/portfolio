@@ -11,15 +11,13 @@ Sistema completo de gestión de portafolio personal desarrollado con Laravel 12,
 
 ## ✨ Características Principales
 
-- 🔐 **Autenticación segura** con Laravel Fortify (incluye 2FA)
-- 👤 **Gestión de perfil profesional** con información de contacto
-- 💼 **Administración de proyectos** con descripción, rol, fechas y estado
-- 🎯 **Gestión de habilidades** (técnicas y blandas)
-- 📚 **Registro de estudios académicos**
-- 🎓 **Seguimiento de cursos y capacitaciones**
-- 🔗 **Relación muchos a muchos** entre proyectos y habilidades
-- ⚡ **Interfaz reactiva** con Livewire y Flux UI
-- 📱 **Diseño responsive** y moderno
+- 👤 **Gestión de perfiles avanzados** con avatar, bio, y contacto.
+- 🏷️ **Categorías para áreas principales** (Backend, Frontend, Full Stack…).
+- ⭐ **Proyectos destacados y colaborativos.**
+- 🔖 **Etiquetas polimórficas** (tecnologías, habilidades técnicas y blandas).
+- 🎓 **Registro de estudios, cursos y certificaciones** (educations unificada).
+- 🖼️ **Imágenes polimórficas** (galerías de proyectos, avatars, logos, certificados).
+- 🔗 **Enlaces polimórficos** (redes sociales, repositorios, videos, demos…).
 
 ---
 
@@ -196,27 +194,54 @@ php artisan pail
 
 ### Modelos y Relaciones
 
+``` 
+User (1)──(1)Profile
+Profile(1)──(N)Project──(N:M-polim.)Tag
+│ ↑
+│ ├──(polim.)Image
+│ ├──(polim.)Link
+│ └──(N:1)Category
+│
+├──(N)Education──(polim.)Image
+│ └──(polim.)Link
+└──(polim.)Image (avatar)
+├──(polim.)Link (redes sociales)
+Tags (N:M morph) <── Profile/Project/Education
 ```
-User (1) ──── (1) Profile
-                   │
-                   ├── (1:N) Projects
-                   ├── (1:N) Skills
-                   ├── (1:N) Studies
-                   └── (1:N) Trainings
 
-Project (N) ──── (N) Skill (tabla pivot: project_skill)
+### 🏗️ Modelos principales
+
+- **User** - Usuario autenticado 
+- **Profile** - Perfil profesional
+- **Category**- Área principal (Backend, Frontend...)
+- **Project** - Proyecto personal, privado o colaborativo
+- **Tag** - Etiquetas/tecnologías/habilidades
+- **Education** - Formación académica/cursos/certificados
+- **Image** - Imagen polimórfica (avatar, logo, galería, iconos para las hanbilidades técnicas)
+- **Link** - Enlace polimórfico (repo, social, demo)
+- **Taggables** - Tabla pivote polimórfica para tags
+
+---
+
+## 🛠️ Instalación rápida
+
 ```
+# 1. Clona el repositorio  
+git clone https://github.com/drfoxsoscomputer/portfolio.git
 
-### Tablas Principales
+# 2. Instala dependencias  
+composer install && npm install
 
-- **users** - Usuarios del sistema
-- **profiles** - Información del perfil profesional
-- **projects** - Proyectos realizados
-- **skills** - Habilidades técnicas y blandas
-- **studies** - Estudios académicos
-- **trainings** - Cursos y capacitaciones
-- **project_skill** - Relación muchos a muchos entre proyectos y habilidades
+# 3. Crea el archivo `.env`
+cp .env.example .env
 
+# 4. Genera la `key` del proyecto
+php artisan key_generate
+
+# 5. Ejecuta migraciones
+php artisan migrate
+
+```
 ---
 
 ## 🔑 Credenciales de Acceso (Demo)
@@ -342,7 +367,7 @@ Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE)
 
 ## 👨‍💻 Autor
 
-**Tu Nombre**
+**Denis Piña**
 
 - GitHub: [@drfoxsoscomputer](https://github.com/drfoxsoscomputer)
 - Email: daprthefox@gmail.com
@@ -365,17 +390,10 @@ Si tienes alguna pregunta o problema:
 
 1. Revisa la documentación en este README
 2. Consulta [TINKER_COMMANDS.md](TINKER_COMMANDS.md) para ejemplos de datos
-3. Abre un [issue](https://github.com/tu-usuario/portfolio/issues) en GitHub
+3. Abre un [issue](https://github.com/drfoxsoscomputer/portfolio/issues) en GitHub
 
 ---
 
 ⭐ **Si este proyecto te fue útil, considera darle una estrella en GitHub**
 
 **Desarrollado con ❤️ usando Laravel y Livewire**
-
-// 1. Certificaciones lo podemos unir a Training, es decir, si es un curso/seminario entre otro y tiene certificacion con una url de dicho certificado se puedde agregar sino, sería nullable, tambien una vista previa para la imagen del certificado sea con certificacion oficial o solo un certificado de asistencia.
-2. Tags/Categorias seria polimorfica?, podemos tambien modificar el campo de la migracion links y reemplazar el enum type
-3. Tecnologías/Stack aun no me queda claro, puedes explicarmelo con un ejemplo?.
-4. SEO podemos dejarlo para el final?
-5. Analytics/Estadísticas me gusta esa.
-(no crear migraciones nuevas para agregar columnas, sino modificar las migraciones y al finalizar realizar una migracion con fresh)
