@@ -334,6 +334,7 @@ $profile->tags()->where('type', 'soft')->get();
 $project = App\Models\Project::with('tags')->find(1); // Cambia el ID
 // Técnicas:
 $project->tags->where('type', 'technical');
+
 // Blandas:
 $project->tags->where('type', 'soft');
 ```
